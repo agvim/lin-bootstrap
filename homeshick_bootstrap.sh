@@ -7,7 +7,7 @@ github="https://github.com"
 
 #get homeshick
 git clone $github/agvim/homeshick.git $HOME/.homesick/repos/homeshick
-homeshick="yes | $HOME/.homesick/repos/homeshick/homeshick.sh"
+homeshick="yes | $HOME/.homesick/repos/homeshick/bin/homeshick"
 
 #clone the basic castles
 eval $homeshick clone $github/agvim/cfg-bash
