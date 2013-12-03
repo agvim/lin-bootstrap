@@ -15,7 +15,7 @@ $aptget update
 $aptget install -y aptitude
 
 #allways used packages
-PACKAGES="bash tmux git vim exuberant-ctags ack-grep"
+PACKAGES="bash tmux git vim exuberant-ctags ack-grep fonts-inconsolata"
 
 #throw in gvim if we have x11 installed
 is_installed x11-common
