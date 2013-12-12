@@ -15,13 +15,13 @@ $aptget update
 $aptget install -y aptitude
 
 #allways used packages
-PACKAGES="bash tmux git vim exuberant-ctags ack-grep fonts-inconsolata"
+PACKAGES="bash tmux git vim exuberant-ctags silversearcher-ag"
 
 #throw in gvim if we have x11 installed
 is_installed x11-common
 if [[ $? -eq 1 ]]
 then
-    PACKAGES="$PACKAGES vim-gtk"
+    PACKAGES="$PACKAGES vim-gtk fonts-inconsolata"
 fi
 
 #if we have xfce4 panel, install the panel plugins and orage calendar
