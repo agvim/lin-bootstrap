@@ -14,8 +14,13 @@ fi
 $aptget update
 $aptget install -y aptitude
 
-#allways used packages
-PACKAGES="bash tmux git vim exuberant-ctags silversearcher-ag"
+#always useful packages
+PACKAGES="tmux vim"
+
+#stuff for vim in a desktop machine
+PACKAGES="$PACKAGES git exuberant-ctags silversearcher-ag"
+#stuff for YouCompleteMe vim plugin
+PACKAGES="$PACKAGES build-essential cmake python-dev"
 
 #throw in gvim if we have x11 installed
 is_installed x11-common
