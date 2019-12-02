@@ -12,16 +12,20 @@ fi
 PACKAGES="tmux vim"
 
 # stuff for vim in a desktop machine
-PACKAGES="$PACKAGES git exuberant-ctags silversearcher-ag"
+PACKAGES="$PACKAGES git exuberant-ctags silversearcher-ag yarnpkg"
+
+# stuff for neovim
+PACKAGES="$PACKAGES xsel python3-pip"
+pip3 install neovim
 
 # zsh shell
 PACKAGES="$PACKAGES zsh"
 
-# throw in gvim if we have x11 installed
+# use kitty asthe default terminal emulator and use a font with ligatures
 is_installed x11-common
 if [[ $? -eq 1 ]]
 then
-    PACKAGES="$PACKAGES vim-gtk fonts-firacode"
+    PACKAGES="$PACKAGES fonts-firacode kitty"
 fi
 
 # # all this is installed by default now
@@ -34,3 +38,8 @@ fi
 # use apt to install the basic packages
 $apt update
 $apt install -y $PACKAGES
+
+# make a bin link for yarn
+mkdir $HOME/bin
+## yarn for coc.vim
+ln -s /usr/bin/yarnpkg $HOME/bin/yarn
