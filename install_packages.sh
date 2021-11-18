@@ -1,45 +1,91 @@
 #!/bin/bash
-. "$(dirname $0)/lib/package_tests.sh"
-
+SCRIPT_PATH=$(dirname $0)
+homeshick="$HOME/.homesick/repos/homeshick/bin/homeshick"
+IFS='
+'
+APPIMAGES_UPDATEABLE_FOLDER="$HOME/.local/appimages/updateable"
 if [ `whoami` = 'root' ]
 then
-    apt='apt'
+    apt='apt-get'
 else
-    apt='sudo apt'
+    apt='sudo apt-get'
 fi
 
-# always useful packages
-PACKAGES="tmux vim"
+function print_header {
+    # the header in bold yellow underlined with ======
+    printf -v spaces "%*s" ${#1} " "
+    printf "\n\033[1;33m%s\n%s\033[0m\n\n" "$1" "${spaces// /=}"
+}
 
-# stuff for vim in a desktop machine
-PACKAGES="$PACKAGES git exuberant-ctags silversearcher-ag yarnpkg"
+install () {
+    # try to install the manually downloaded packages for the current user
+    for F in $(find "$SCRIPT_PATH/package_scripts" -name '*.sh' | sort) ; do
+        print_header "install $(basename $F)"
+        eval "$F" install
+    done
 
-# stuff for neovim
-PACKAGES="$PACKAGES xsel python3-pip"
-pip3 install neovim
 
-# zsh shell
-PACKAGES="$PACKAGES zsh"
+    # system packages
+    # always useful packages
+    PACKAGES="tmux vim"
 
-# use kitty asthe default terminal emulator and use a font with ligatures
-is_installed x11-common
-if [[ $? -eq 1 ]]
-then
-    PACKAGES="$PACKAGES fonts-firacode kitty"
-fi
+    # stuff for vim/neovim
+    PACKAGES="$PACKAGES git universal-ctags ripgrep"
 
-# # all this is installed by default now
-# is_installed xfce4-panel
-# if [[ $? -eq 1 ]]
-# then
-#     PACKAGES="$PACKAGES xfce4-systemload-plugin xfce4-netload-plugin xfce4-places-plugin"
-# fi
+    # stuff for neovim
+    PACKAGES="$PACKAGES xsel python3-pip"
 
-# use apt to install the basic packages
-$apt update
-$apt install -y $PACKAGES
+    # zsh shell
+    PACKAGES="$PACKAGES zsh"
 
-# make a bin link for yarn
-mkdir $HOME/bin
-## yarn for coc.vim
-ln -s /usr/bin/yarnpkg $HOME/bin/yarn
+    # use apt to install the basic packages
+    print_header "install system packages"
+    eval $apt update && eval $apt install -y $PACKAGES
+
+    # neovim python bindings
+    print_header "install python3 neovim bindings"
+    pip3 install pynvim
+
+    # homeshick
+    print_header "install homeshick and configurations"
+    git clone https://github.com/agvim/homeshick.git $HOME/.homesick/repos/homeshick
+    eval $homeshick clone https://github.com/agvim/cfg-bash
+    # eval $homeshick clone https://github.com/agvim/cfg-vim
+    eval $homeshick clone https://github.com/agvim/cfg-nvim
+    eval $homeshick clone https://github.com/agvim/cfg-tmux
+    eval $homeshick clone https://github.com/agvim/cfg-zsh
+    eval $homeshick clone https://github.com/agvim/cfg-kitty
+    eval $homeshick clone https://github.com/agvim/cfg-bat
+    eval $homeshick link
+}
+
+update () {
+    print_header "update system packages"
+    eval $apt update && eval $apt upgrade && eval $apt autoremove
+
+    # try to update the manually downloaded packages for the current user
+    for F in $(find "$SCRIPT_PATH/package_scripts" -name '*.sh' | sort) ; do
+        print_header "update $(basename $F)"
+        eval "$F" update
+    done
+
+    # appimage
+    for F in $(find "$APPIMAGES_UPDATEABLE_FOLDER" -iname '*.appimage')
+    do
+        print_header "appimage update $(basename $F)"
+        appimageupdatetool --overwrite --remove-old "$F"
+    done
+
+    # neovim python bindings
+    print_header "update python3 neovim bindings"
+    pip3 install --upgrade pynvim
+
+    # homeshick
+    print_header "homeshick update"
+    eval $homeshick pull
+}
+
+case "$1" in
+    "install" ) ! check_if_installed && install ;;
+    "update" ) update ;;
+esac
