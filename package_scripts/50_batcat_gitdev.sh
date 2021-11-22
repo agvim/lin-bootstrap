@@ -15,7 +15,7 @@ check_if_installed () {
 
 install(){
     wget "https://github.com/sharkdp/bat/releases/download/v${BAT_VERSION}/bat_${BAT_VERSION}_amd64.deb" -O /tmp/bat_${BAT_VERSION}_amd64.deb &&
-        sudo dpkg -I /tmp/bat_${BAT_VERSION}_amd64.deb
+        sudo dpkg -i /tmp/bat_${BAT_VERSION}_amd64.deb
 
     return $?
 }

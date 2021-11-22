@@ -15,7 +15,7 @@ check_if_installed () {
 
 install(){
     wget "https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/git-delta_${DELTA_VERSION}_amd64.deb" -O /tmp/git-delta_${DELTA_VERSION}_amd64.deb &&
-        sudo dpkg -I /tmp/git-delta_${DELTA_VERSION}_amd64.deb
+        sudo dpkg -i /tmp/git-delta_${DELTA_VERSION}_amd64.deb
 
     return $?
 }
