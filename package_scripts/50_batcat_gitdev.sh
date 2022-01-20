@@ -5,7 +5,9 @@
 BAT_VERSION=$(curl -Ls -I -o /dev/null -w %{url_effective} https://github.com/sharkdp/bat/releases/latest | sed -r 's/[^0-9]+//')
 
 check_if_installed () {
-    LOCAL_VERSION=$(bat --version | sed -r 's/[^0-9]*//')
+    # $ bat --version
+    # bat 0.19.0 (59a8f58)
+    LOCAL_VERSION=$(bat --version | cut -d' ' -f 2)
     if [[ "$LOCAL_VERSION" == "$BAT_VERSION" ]]; then
         return 0
     else
