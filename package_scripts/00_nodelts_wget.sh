@@ -29,5 +29,5 @@ update () {
 
 case "$1" in
     "install" ) ! check_if_installed && install ;;
-    "update" ) update ;;
+    "update" ) ! check_if_installed && install; update ;;
 esac
