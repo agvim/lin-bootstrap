@@ -6,7 +6,7 @@ KITTY_VERSION=$(curl -Ls -I -o /dev/null -w %{url_effective} https://github.com/
 INSTALL_PATH="$HOME/.local/kitty.app"
 
 check_if_installed () {
-    LOCAL_VERSION=$(kitty --version | sed -r 's/[^0-9]*//; s/ created by Kovid Goyal//')
+    LOCAL_VERSION=$(kitty --version | cut -d' ' -f 2)
     if [[ "$LOCAL_VERSION" == "$KITTY_VERSION" ]]; then
         return 0
     else
@@ -18,7 +18,8 @@ install(){
     rm -rf "$INSTALL_PATH/*"
     wget "https://github.com/kovidgoyal/kitty/releases/download/v${KITTY_VERSION}/kitty-${KITTY_VERSION}-x86_64.txz" -O /tmp/kitty_${KITTY_VERSION}_x86_64.txz &&
         tar -C "$INSTALL_PATH" -xJof "/tmp/kitty_${KITTY_VERSION}_x86_64.txz" &&
-        ln -s -f "$INSTALL_PATH/bin/kitty" ".local/bin/kitty"
+        ln -s -f "$INSTALL_PATH/bin/kitty" ".local/bin/kitty" &&
+        cp "$INSTALL_PATH/share/applications/kitty.desktop" ~/.local/share/applications/
 
     return $?
 }
