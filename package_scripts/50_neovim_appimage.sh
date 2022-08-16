@@ -7,7 +7,7 @@ DOWNLOADED_FILENAME=nvim.appimage
 SYMLINK="$HOME/.local/bin/nvim"
 NIGHTLY_APPIMAGE_URL="https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage"
 NIGHTLY_DOWNLOADED_FILENAME=nvim-nightly.appimage
-NIGHTLY_SYMLINK="$HOME/.local/bin/nvim"
+NIGHTLY_SYMLINK="$HOME/.local/bin/nvim-nightly"
 
 check_if_installed () {
     ls "$APPIMAGES_FOLDER/$DOWNLOADED_FILENAME" > /dev/null
