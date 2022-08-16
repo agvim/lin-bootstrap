@@ -16,3 +16,9 @@ install () {
 #     $HOME/.homesick/repos/homeshick/bin/homeshick update homeshick
 #     return $?
 # }
+
+case "$1" in
+    "install" ) ! check_if_installed && install ;;
+    # "update" ) update ;;
+    "updateable" ) exit 1;;
+esac

@@ -23,6 +23,12 @@ install(){
 }
 
 case "$1" in
-    "install" ) ! check_if_installed && install ;;
-    "update" ) ! check_if_installed && install ;;
+    "install" | "update" )
+        if [[ check_if_installed ]]; then
+            echo "no update needed"
+            exit 0
+        else
+            install
+        fi;;
+        # ! check_if_installed && install ;;
 esac

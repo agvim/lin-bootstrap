@@ -22,9 +22,9 @@ check_if_installed () {
 install(){
     # FIXME: individual fonts (neovide has problem with variable ones)
     # for the jetbrains one, unzip only the individual ones with ligatures
-    FIRA_VERSION=${curl -Ls -I -o /dev/null -w %{url_effective} https://github.com/tonsky/FiraCode/releases/latest | sed -r 's/[^0-9]+//'}
-    JETBRAINS_VERSION=${curl -Ls -I -o /dev/null -w %{url_effective} https://github.com/JetBrains/JetBrainsMono/releases/latest | sed -r 's/[^0-9]+//'}
-    mkdir -p .local/share/fonts/ &&
+    FIRA_VERSION=$(curl -Ls -I -o /dev/null -w %{url_effective} https://github.com/tonsky/FiraCode/releases/latest | sed -r 's/[^0-9]+//')
+    JETBRAINS_VERSION=$(curl -Ls -I -o /dev/null -w %{url_effective} https://github.com/JetBrains/JetBrainsMono/releases/latest | sed -r 's/[^0-9]+//')
+    mkdir -p $HOME/.local/share/fonts/ &&
         wget "https://github.com/tonsky/FiraCode/releases/download/$FIRA_VERSION/Fira_Code_v$FIRA_VERSION.zip" -O /tmp/fira_code.zip &&
         unzip  -j /tmp/fira_code.zip 'ttf/*.ttf' -d "$HOME/.local/share/fonts/" &&
         wget "https://github.com/JetBrains/JetBrainsMono/releases/download/v$JETBRAINS_VERSION/JetBrainsMono-$JETBRAINS_VERSION.zip" -O /tmp/jetbrainsmono.zip &&
@@ -37,5 +37,5 @@ install(){
 case "$1" in
     "install" ) ! check_if_installed && install ;;
     # update not available
-    # "update" ) update ;;
+    "updateable" ) exit 1 ;;
 esac

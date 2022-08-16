@@ -33,6 +33,11 @@ install(){
 # }
 
 case "$1" in
-    "install" ) ! check_if_installed && install ;;
-    # "update" ) update ;;
+    "install" | "update")
+        if [[ check_if_installed ]]; then
+            exit 0
+        else
+            install
+        fi;;
+    "updateable") exit 1;;
 esac

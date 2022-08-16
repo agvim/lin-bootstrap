@@ -16,6 +16,7 @@ check_if_installed () {
 
 install(){
     rm -rf "$INSTALL_PATH/*"
+    mkdir -p "$INSTALL_PATH"
     wget "https://github.com/kovidgoyal/kitty/releases/download/v${KITTY_VERSION}/kitty-${KITTY_VERSION}-x86_64.txz" -O /tmp/kitty_${KITTY_VERSION}_x86_64.txz &&
         tar -C "$INSTALL_PATH" -xJof "/tmp/kitty_${KITTY_VERSION}_x86_64.txz" &&
         ln -s -f "$INSTALL_PATH/bin/kitty" ".local/bin/kitty" &&
@@ -25,6 +26,17 @@ install(){
 }
 
 case "$1" in
-    "install" ) ! check_if_installed && install ;;
-    "update" ) ! check_if_installed && install ;;
+    "install" )
+        if [[ check_if_installed ]]; then
+            exit 0
+        else
+            sudo apt-get install -y libxcb-xkb1 && install
+        fi;;
+    "update")
+        if [[ check_if_installed ]]; then
+            echo "no update needed"
+            exit 0
+        else
+            install
+        fi;;
 esac

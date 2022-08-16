@@ -2,7 +2,7 @@
 
 
 # lts version is in a line that says "... Latest LTS <strong>x.y.z</strong> ..."
-NODE_VERSION=$(wget -q https://nodejs.org/en/download -O - | grep "Latest LTS" | sed -r 's/.*<strong>//; s/<\/strong>.*//')
+NODE_VERSION=$(wget -q https://nodejs.org/en/download/ -O - | grep "Latest LTS" | sed -r 's/.*<strong>//; s/<\/strong>.*//')
 check_if_installed () {
     ls "/opt/node-v$NODE_VERSION-linux-x64" > /dev/null
 
