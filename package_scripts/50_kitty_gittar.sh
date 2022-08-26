@@ -17,10 +17,10 @@ check_if_installed () {
 install(){
     rm -rf "$INSTALL_PATH/*"
     mkdir -p "$INSTALL_PATH"
-    wget "https://github.com/kovidgoyal/kitty/releases/download/v${KITTY_VERSION}/kitty-${KITTY_VERSION}-x86_64.txz" -O /tmp/kitty_${KITTY_VERSION}_x86_64.txz &&
+    wget "https://github.com/kovidgoyal/kitty/releases/download/v${KITTY_VERSION}/kitty-${KITTY_VERSION}-x86_64.txz" -O "/tmp/kitty_${KITTY_VERSION}_x86_64.txz" &&
         tar -C "$INSTALL_PATH" -xJof "/tmp/kitty_${KITTY_VERSION}_x86_64.txz" &&
-        ln -s -f "$INSTALL_PATH/bin/kitty" ".local/bin/kitty" &&
-        cp "$INSTALL_PATH/share/applications/kitty.desktop" ~/.local/share/applications/
+        ln -s -f "$INSTALL_PATH/bin/kitty" "$HOME/.local/bin/kitty" &&
+        cp "$INSTALL_PATH/share/applications/kitty.desktop" "$HOME/.local/share/applications/"
 
     return $?
 }

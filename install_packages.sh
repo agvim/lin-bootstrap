@@ -21,6 +21,14 @@ function print_header {
     printf "\n\033[1;33m%s\n%s\033[0m\n\n" "$1" "${spaces// /=}"
 }
 
+function print_outcome {
+    if [[ $1 -ne 0 ]]; then
+        printf "\033[31m$CROSS failed updating %s\033[0m\n" "$2"
+    else
+        printf "\033[32m$CHECKMARK updated %s\033[0m\n" "$2"
+    fi
+}
+
 install () {
     # system packages
     print_header "install system packages"
@@ -37,7 +45,7 @@ install () {
     # use apt to install the basic packages
     eval $apt update && eval $apt install -y $PACKAGES
 
-    # try to install the manually downloaded packages for the current user
+    # try to install the manually downloaded packages
     # includes appimageupdatetool and homeshick
     for F in $(find "$SCRIPT_PATH/package_scripts" -name '*.sh' | sort) ; do
         print_header "install $(basename $F)"
@@ -63,19 +71,15 @@ install () {
 
 update () {
     print_header "update system packages"
-    eval $apt update && eval $apt upgrade && eval $apt autoremove
+    eval $apt update && eval $apt upgrade -y && eval $apt autoremove -y
 
-    # try to update the manually downloaded packages for the current user
+    # try to update the manually downloaded packages
     for F in $(find "$SCRIPT_PATH/package_scripts" -name '*.sh' | sort) ; do
         eval "$F" updateable
         if [[ $? -eq 0 ]]; then
             print_header "update $(basename $F)"
             eval "$F" update
-            if [[ $? -ne 0 ]]; then
-                printf "\033[31m$CROSS failed updating %s\033[0m\n" "$(basename $F)"
-            else
-                printf "\033[32m$CHECKMARK updated %s\033[0m\n" "$(basename $F)"
-            fi
+            print_outcome $? "$(basename $F)"
         fi
     done
 
@@ -84,33 +88,21 @@ update () {
     do
         print_header "appimage update $(basename $F)"
         appimageupdatetool --overwrite --remove-old "$F"
-        if [[ $? -ne 0 ]]; then
-            printf "\033[31m$CROSS failed updating %s\033[0m\n" "$(basename $F)"
-        else
-            printf "\033[32m$CHECKMARK updated %s\033[0m\n" "$(basename $F)"
-        fi
+        print_outcome $? "$(basename $F)"
     done
 
     # neovim python bindings
     print_header "update python3 neovim bindings"
     pip3 install --upgrade pynvim
-    if [[ $? -ne 0 ]]; then
-        printf "\033[31m$CROSS failed updating neovim python bindings\033[0m\n"
-    else
-        printf "\033[32m$CHECKMARK updated neovim python bindings\033[0m\n"
-    fi
+    print_outcome $? "neovim python bindings"
 
     # homeshick
     print_header "homeshick update"
     eval $homeshick pull
-    if [[ $? -ne 0 ]]; then
-        printf "\033[31m$CROSS failed updating homeshick castles\033[0m\n"
-    else
-        printf "\033[32m$CHECKMARK updated homeshick castles\033[0m\n"
-    fi
+    print_outcome $? "homeshick castles"
 }
 
 case "$1" in
-    "install" ) ! check_if_installed && install ;;
+    "install" ) install ;;
     "update" ) update ;;
 esac
