@@ -6,7 +6,10 @@ KITTY_VERSION=$(curl -Ls -I -o /dev/null -w %{url_effective} https://github.com/
 INSTALL_PATH="$HOME/.local/kitty.app"
 
 check_if_installed () {
-    LOCAL_VERSION=$(kitty --version | cut -d' ' -f 2)
+    LOCAL_VERSION=$(which kitty > /dev/null && kitty --version | cut -d' ' -f 2)
+    if [[ $? != 0 ]]; then
+        return 1
+    fi
     if [[ "$LOCAL_VERSION" == "$KITTY_VERSION" ]]; then
         return 0
     else

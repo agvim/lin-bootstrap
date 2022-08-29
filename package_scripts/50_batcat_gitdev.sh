@@ -7,7 +7,10 @@ BAT_VERSION=$(curl -Ls -I -o /dev/null -w %{url_effective} https://github.com/sh
 check_if_installed () {
     # $ bat --version
     # bat 0.19.0 (59a8f58)
-    LOCAL_VERSION=$(bat --version | cut -d' ' -f 2)
+    LOCAL_VERSION=$(which bat > /dev/null && bat --version | cut -d' ' -f 2)
+    if [[ $? != 0 ]]; then
+        return 1
+    fi
     if [[ "$LOCAL_VERSION" == "$BAT_VERSION" ]]; then
         return 0
     else

@@ -7,7 +7,10 @@ NEOVIDE_VERSION=$(curl -Ls -I -o /dev/null -w %{url_effective} https://github.co
 check_if_installed () {
     # $ neovide --version
     # Neovide 0.10.1
-    LOCAL_VERSION=$(neovide --version | cut -d' ' -f 2)
+    LOCAL_VERSION=$(which neovide > /dev/null && neovide --version | cut -d' ' -f 2)
+    if [[ $? != 0 ]]; then
+        return 1
+    fi
     if [[ "$LOCAL_VERSION" == "$NEOVIDE_VERSION" ]]; then
         return 0
     else

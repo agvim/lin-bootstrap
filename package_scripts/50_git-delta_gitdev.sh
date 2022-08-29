@@ -5,7 +5,10 @@
 DELTA_VERSION=$(curl -Ls -I -o /dev/null -w %{url_effective} https://github.com/dandavison/delta/releases/latest | sed -r 's/[^0-9]+//')
 
 check_if_installed () {
-    LOCAL_VERSION=$(delta --version | xargs | cut -d' ' -f 2)
+    LOCAL_VERSION=$(which delta > /dev/null && delta --version | xargs | cut -d' ' -f 2)
+    if [[ $? != 0 ]]; then
+        return 1
+    fi
     if [[ "$LOCAL_VERSION" == "$DELTA_VERSION" ]]; then
         return 0
     else
