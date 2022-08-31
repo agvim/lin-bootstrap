@@ -6,9 +6,6 @@ DELTA_VERSION=$(curl -Ls -I -o /dev/null -w %{url_effective} https://github.com/
 
 check_if_installed () {
     LOCAL_VERSION=$(which delta > /dev/null && delta --version | xargs | cut -d' ' -f 2)
-    if [[ $? != 0 ]]; then
-        return 1
-    fi
     if [[ "$LOCAL_VERSION" == "$DELTA_VERSION" ]]; then
         return 0
     else
@@ -25,7 +22,7 @@ install(){
 
 case "$1" in
     "install" | "update" )
-        if [[ check_if_installed ]]; then
+        if check_if_installed; then
             echo "no update needed"
             exit 0
         else

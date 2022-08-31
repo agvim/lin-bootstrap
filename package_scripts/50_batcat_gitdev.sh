@@ -8,9 +8,6 @@ check_if_installed () {
     # $ bat --version
     # bat 0.19.0 (59a8f58)
     LOCAL_VERSION=$(which bat > /dev/null && bat --version | cut -d' ' -f 2)
-    if [[ $? != 0 ]]; then
-        return 1
-    fi
     if [[ "$LOCAL_VERSION" == "$BAT_VERSION" ]]; then
         return 0
     else
@@ -27,7 +24,7 @@ install(){
 
 case "$1" in
     "install" | "update" )
-        if [[ check_if_installed ]]; then
+        if check_if_installed; then
             echo "no update needed"
             exit 0
         else

@@ -7,9 +7,6 @@ INSTALL_PATH="$HOME/.local/kitty.app"
 
 check_if_installed () {
     LOCAL_VERSION=$(which kitty > /dev/null && kitty --version | cut -d' ' -f 2)
-    if [[ $? != 0 ]]; then
-        return 1
-    fi
     if [[ "$LOCAL_VERSION" == "$KITTY_VERSION" ]]; then
         return 0
     else
@@ -30,13 +27,13 @@ install(){
 
 case "$1" in
     "install" )
-        if [[ check_if_installed ]]; then
+        if check_if_installed; then
             exit 0
         else
             sudo apt-get install -y libxcb-xkb1 && install
         fi;;
     "update")
-        if [[ check_if_installed ]]; then
+        if check_if_installed; then
             echo "no update needed"
             exit 0
         else

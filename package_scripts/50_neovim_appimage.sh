@@ -34,7 +34,7 @@ install(){
 
 case "$1" in
     "install" | "update")
-        if [[ check_if_installed ]]; then
+        if check_if_installed; then
             exit 0
         else
             install

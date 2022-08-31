@@ -1,35 +1,35 @@
 #!/bin/bash
 
 check_if_installed () {
-    # .local/share/fonts/FiraCode-Bold.ttf: Fira Code:style=Bold
-    # .local/share/fonts/FiraCode-Light.ttf: Fira Code,Fira Code Light:style=Light,Regular
-    # .local/share/fonts/FiraCode-Medium.ttf: Fira Code,Fira Code Medium:style=Medium,Regular
-    # .local/share/fonts/FiraCode-Regular.ttf: Fira Code:style=Regular
-    # .local/share/fonts/FiraCode-Retina.ttf: Fira Code,Fira Code Retina:style=Retina,Regular
-    # .local/share/fonts/FiraCode-SemiBold.ttf: Fira Code,Fira Code SemiBold:style=SemiBold,Regular
-    # .local/share/fonts/JetBrainsMono-Bold-Italic.ttf: JetBrains Mono:style=Bold Italic
-    # .local/share/fonts/JetBrainsMono-Bold.ttf: JetBrains Mono:style=Bold
-    # .local/share/fonts/JetBrainsMono-Italic.ttf: JetBrains Mono:style=Italic
-    # .local/share/fonts/JetBrainsMono-Regular.ttf: JetBrains Mono:style=Regular
-    # .local/share/fonts/Symbols-2048-em Nerd Font Complete.ttf: Symbols Nerd Font:style=2048-em
+    # /home/xxx/.local/share/fonts/FiraCode-Bold-Nerd.ttf: FiraCode Nerd Font Mono:style=Bold
+    # /home/xxx/.local/share/fonts/FiraCode-Regular-Nerd.ttf: FiraCode Nerd Font Mono:style=Regular
+    # /home/xxx/.local/share/fonts/JetBrainsMono-Regular-Nerd.ttf: JetBrainsMono Nerd Font Mono:style=Regular
+    # /home/xxx/.local/share/fonts/JetBrainsMono-Italic-Nerd.ttf: JetBrainsMono Nerd Font Mono:style=Italic
+    # /home/xxx/.local/share/fonts/JetBrainsMono-Bold-Italic-Nerd.ttf: JetBrainsMono Nerd Font Mono:style=Bold Italic
+    # /home/xxx/.local/share/fonts/JetBrainsMono-Bold-Nerd.ttf: JetBrainsMono Nerd Font Mono:style=Bold
     fc-list | grep "FiraCode" > /dev/null &&
-        fc-list | grep "JetBrainsMono" > /dev/null &&
-        fc-list | grep "Symbols-2048" > /dev/null
-
+        fc-list | grep "JetBrainsMono" > /dev/null
     return $?
 }
 
 install(){
     # FIXME: individual fonts (neovide has problem with variable ones)
-    # for the jetbrains one, unzip only the individual ones with ligatures
-    FIRA_VERSION=$(curl -Ls -I -o /dev/null -w %{url_effective} https://github.com/tonsky/FiraCode/releases/latest | sed -r 's/[^0-9]+//')
-    JETBRAINS_VERSION=$(curl -Ls -I -o /dev/null -w %{url_effective} https://github.com/JetBrains/JetBrainsMono/releases/latest | sed -r 's/[^0-9]+//')
+    # note they need to be the MONO variant for kitty (and using it also for neovide)
+    NERD_VERSION=$(curl -Ls -I -o /dev/null -w %{url_effective} https://github.com/ryanoasis/nerd-fonts/releases/latest | sed -r 's/[^0-9]+//')
+    FONTTEMP=$(mktemp -d /tmp/fontsXXXXXXX)
+    echo $FONTTEMP
     mkdir -p $HOME/.local/share/fonts/ &&
-        wget "https://github.com/tonsky/FiraCode/releases/download/$FIRA_VERSION/Fira_Code_v$FIRA_VERSION.zip" -O /tmp/fira_code.zip &&
-        unzip  -j /tmp/fira_code.zip 'ttf/*.ttf' -d "$HOME/.local/share/fonts/" &&
-        wget "https://github.com/JetBrains/JetBrainsMono/releases/download/v$JETBRAINS_VERSION/JetBrainsMono-$JETBRAINS_VERSION.zip" -O /tmp/jetbrainsmono.zip &&
-        unzip  -j /tmp/jetbrainsmono.zip 'fonts/ttf/JetBrainsMono-*.ttf' -d "$HOME/.local/share/fonts/" &&
-        wget "https://github.com/ryanoasis/nerd-fonts/raw/master/src/glyphs/Symbols-2048-em%20Nerd%20Font%20Complete.ttf" -O "$HOME/.local/share/fonts/Symbols-2048-em Nerd Font Complete.ttf"
+        wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v$NERD_VERSION/FiraCode.zip" -O "$FONTTEMP/fira_code.zip" &&
+        unzip -o -j "$FONTTEMP/fira_code.zip" -d "$FONTTEMP/" &&
+        cp "$FONTTEMP/Fira Code Bold Nerd Font Complete Mono.ttf" "$HOME/.local/share/fonts/FiraCode-Bold-Nerd.ttf" &&
+        cp "$FONTTEMP/Fira Code Regular Nerd Font Complete Mono.ttf" "$HOME/.local/share/fonts/FiraCode-Regular-Nerd.ttf" &&
+        wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v$NERD_VERSION/JetBrainsMono.zip" -O "$FONTTEMP/jetbrains_mono.zip" &&
+        unzip  -o -j "$FONTTEMP/jetbrains_mono.zip" -d "$FONTTEMP/" &&
+        cp "$FONTTEMP/JetBrains Mono Italic Nerd Font Complete Mono.ttf" "$HOME/.local/share/fonts/JetBrainsMono-Italic-Nerd.ttf" &&
+        cp "$FONTTEMP/JetBrains Mono Bold Italic Nerd Font Complete Mono.ttf" "$HOME/.local/share/fonts/JetBrainsMono-Bold-Italic-Nerd.ttf" &&
+        cp "$FONTTEMP/JetBrains Mono Regular Nerd Font Complete Mono.ttf" "$HOME/.local/share/fonts/JetBrainsMono-Regular-Nerd.ttf" &&
+        cp "$FONTTEMP/JetBrains Mono Bold Nerd Font Complete Mono.ttf" "$HOME/.local/share/fonts/JetBrainsMono-Bold-Nerd.ttf" &&
+        rm -rf "$FONTTEMP"
 
     return $?
 }

@@ -8,9 +8,6 @@ check_if_installed () {
     # $ neovide --version
     # Neovide 0.10.1
     LOCAL_VERSION=$(which neovide > /dev/null && neovide --version | cut -d' ' -f 2)
-    if [[ $? != 0 ]]; then
-        return 1
-    fi
     if [[ "$LOCAL_VERSION" == "$NEOVIDE_VERSION" ]]; then
         return 0
     else
@@ -27,7 +24,7 @@ install(){
 
 case "$1" in
     "install" | "update" )
-        if [[ check_if_installed ]]; then
+        if check_if_installed; then
             echo "no update needed"
             exit 0
         else
