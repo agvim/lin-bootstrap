@@ -8,18 +8,12 @@ check_if_installed () {
     # $ bat --version
     # bat 0.19.0 (59a8f58)
     LOCAL_VERSION=$(which bat > /dev/null && bat --version | cut -d' ' -f 2)
-    if [[ "$LOCAL_VERSION" == "$BAT_VERSION" ]]; then
-        return 0
-    else
-        return 1
-    fi
+    [[ "$LOCAL_VERSION" == "$BAT_VERSION" ]]
 }
 
 install(){
-    wget "https://github.com/sharkdp/bat/releases/download/v${BAT_VERSION}/bat_${BAT_VERSION}_amd64.deb" -O /tmp/bat_${BAT_VERSION}_amd64.deb &&
+    wget --no-verbose "https://github.com/sharkdp/bat/releases/download/v${BAT_VERSION}/bat_${BAT_VERSION}_amd64.deb" -O /tmp/bat_${BAT_VERSION}_amd64.deb &&
         sudo dpkg -i /tmp/bat_${BAT_VERSION}_amd64.deb
-
-    return $?
 }
 
 case "$1" in

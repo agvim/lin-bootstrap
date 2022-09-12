@@ -11,20 +11,17 @@ NIGHTLY_SYMLINK="$HOME/.local/bin/nvim-nightly"
 
 check_if_installed () {
     ls "$APPIMAGES_FOLDER/$DOWNLOADED_FILENAME" > /dev/null
-    return $?
 }
 
 install(){
     # download appimage, add execution permission and symlink to bin
     mkdir -p "$APPIMAGES_FOLDER" &&
-        wget "$APPIMAGE_URL" -O "$APPIMAGES_FOLDER/$DOWNLOADED_FILENAME" &&
+        wget --no-verbose "$APPIMAGE_URL" -O "$APPIMAGES_FOLDER/$DOWNLOADED_FILENAME" &&
         chmod a+x "$APPIMAGES_FOLDER/$DOWNLOADED_FILENAME" &&
         ln -f -s "$APPIMAGES_FOLDER/$DOWNLOADED_FILENAME" "$SYMLINK" &&
-        wget "$NIGHTLY_APPIMAGE_URL" -O "$APPIMAGES_FOLDER/$NIGHTLY_DOWNLOADED_FILENAME" &&
+        wget --no-verbose "$NIGHTLY_APPIMAGE_URL" -O "$APPIMAGES_FOLDER/$NIGHTLY_DOWNLOADED_FILENAME" &&
         chmod a+x "$APPIMAGES_FOLDER/$NIGHTLY_DOWNLOADED_FILENAME" &&
         ln -f -s "$APPIMAGES_FOLDER/$NIGHTLY_DOWNLOADED_FILENAME" "$NIGHTLY_SYMLINK"
-
-    return $?
 }
 
 # managed with appimageupdatetool

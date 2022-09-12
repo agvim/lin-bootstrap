@@ -8,18 +8,12 @@ check_if_installed () {
     # $ neovide --version
     # Neovide 0.10.1
     LOCAL_VERSION=$(which neovide > /dev/null && neovide --version | cut -d' ' -f 2)
-    if [[ "$LOCAL_VERSION" == "$NEOVIDE_VERSION" ]]; then
-        return 0
-    else
-        return 1
-    fi
+    [[ "$LOCAL_VERSION" == "$NEOVIDE_VERSION" ]]
 }
 
 install(){
-    wget "https://github.com/neovide/neovide/releases/download/${NEOVIDE_VERSION}/neovide.tar.gz" -O "/tmp/neovide_${NEOVIDE_VERSION}.tgz" &&
+    wget --no-verbose "https://github.com/neovide/neovide/releases/download/${NEOVIDE_VERSION}/neovide.tar.gz" -O "/tmp/neovide_${NEOVIDE_VERSION}.tgz" &&
         tar -C "$HOME/.local/bin" -xzof "/tmp/neovide_${NEOVIDE_VERSION}.tgz"
-
-    return $?
 }
 
 case "$1" in

@@ -10,9 +10,9 @@ CROSS='✘'
 APPIMAGES_UPDATEABLE_FOLDER="$HOME/.local/appimages/updateable"
 if [ `whoami` = 'root' ]
 then
-    apt='apt-get'
+    apt='apt-get -q'
 else
-    apt='sudo apt-get'
+    apt='sudo apt-get -q'
 fi
 
 function print_header {
