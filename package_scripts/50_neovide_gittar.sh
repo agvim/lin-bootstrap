@@ -12,7 +12,7 @@ check_if_installed () {
 }
 
 install(){
-    wget --no-verbose "https://github.com/neovide/neovide/releases/download/${NEOVIDE_VERSION}/neovide.tar.gz" -O "/tmp/neovide_${NEOVIDE_VERSION}.tgz" &&
+    wget --no-verbose "https://github.com/neovide/neovide/releases/download/${NEOVIDE_VERSION}/neovide-linux-x86_64.tar.gz" -O "/tmp/neovide_${NEOVIDE_VERSION}.tgz" &&
         tar -C "$HOME/.local/bin" -xzof "/tmp/neovide_${NEOVIDE_VERSION}.tgz"
 }
 

@@ -13,7 +13,7 @@ check_if_installed () {
 install () {
     # download appimage, add execution permission and symlink to bin
     mkdir -p "$APPIMAGES_FOLDER" &&
-        wget --no-verbose "$STABLE_APPIMAGE_URL" -O "$APPIMAGES_FOLDER/$DOWNLOADED_FILENAME" &&
+        wget --no-verbose "$APPIMAGE_URL" -O "$APPIMAGES_FOLDER/$DOWNLOADED_FILENAME" &&
         chmod a+x "$APPIMAGES_FOLDER/$DOWNLOADED_FILENAME" &&
         ln -f -s "$APPIMAGES_FOLDER/$DOWNLOADED_FILENAME" "$SYMLINK"
 }

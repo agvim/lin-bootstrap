@@ -37,7 +37,7 @@ install () {
     # stuff for vim/neovim
     PACKAGES="$PACKAGES git universal-ctags ripgrep"
     # stuff for neovim
-    PACKAGES="$PACKAGES xsel python3-pip"
+    PACKAGES="$PACKAGES xsel python3-pip python3-venv"
     # zsh shell
     PACKAGES="$PACKAGES zsh"
     # misc: curl
